@@ -294,4 +294,21 @@ class GildedRoseTest {
     assertEquals(-1, app.items[0].sellIn);
   }
 
+  @Test
+  void backstagePassesQualityNeverAbove50() {
+    // GIVEN
+    final int sellIn = 2;
+    final int quality = 49;
+    final Item[] items = new Item[] {new Item(BACKSTAGE_PASSES, sellIn, quality)};
+    final GildedRose app = new GildedRose(items);
+
+    // WHEN quality is near 50
+    app.updateQuality();
+
+    // THEN the quality should not surpass 50
+    assertEquals(BACKSTAGE_PASSES, app.items[0].name);
+    assertEquals(50, app.items[0].quality);
+    assertEquals(1, app.items[0].sellIn);
+  }
+
 }
