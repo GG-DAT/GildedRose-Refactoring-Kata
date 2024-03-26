@@ -29,6 +29,20 @@ describe('Gilded Rose', () => {
     });
   })
 
+  describe('Test item sellIn', () => {
+    it('Should update item sellIn', () => {
+      const gildedRose = new GildedRose([new Item('Chainmail', 5, 25)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].sellIn).toBe(4);
+    });
+
+    it('Should be able to decrease below 0', () => {
+      const gildedRose = new GildedRose([new Item('Chainmail', 0, 25)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].sellIn).toBe(-1);
+    });
+  });
+
   describe('Aged Brie', () => {
     it('Should increase item quality on updateQuality', () => {
       const gildedRose = new GildedRose([new Item('Aged Brie', 5, 49)]);
