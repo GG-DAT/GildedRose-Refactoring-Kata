@@ -71,7 +71,50 @@ describe('Gilded Rose', () => {
 
   })
 
-  describe('Concert Passes', () => {
+  describe('Backstage Passes', () => {
+    // const backstagePassName ='Backstage passes to a Toppling Boulders concert';
+    const backstagePassName = 'Backstage passes to a TAFKAL80ETC concert';
+
+    it('should increases in before the concert', () => {
+      const gildedRose = new GildedRose([new Item(backstagePassName, 15, 17)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(18);
+    });
+
+    it('should increases quicker close to the concert', () => {
+      const gildedRose = new GildedRose([new Item(backstagePassName, 9, 17)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(19);
+    });
+    it('should increases even quicker very close to the concert', () => {
+      const gildedRose = new GildedRose([new Item(backstagePassName, 4, 17)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(20);
+    });
+
+    it('should become worthless after the concert', () => {
+      const gildedRose = new GildedRose([new Item(backstagePassName, 0, 17)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(0);
+    });
+
+    it('should never increase above 50 quality', () => {
+      const gildedRose = new GildedRose([
+        new Item(backstagePassName, 15, 50),
+        new Item(backstagePassName, 10, 49),
+        new Item(backstagePassName, 10, 50),
+        new Item(backstagePassName, 2, 48),
+        new Item(backstagePassName, 2, 49),
+        new Item(backstagePassName, 2, 50)
+      ]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(50);
+      expect(items[1].quality).toBe(50);
+      expect(items[2].quality).toBe(50);
+      expect(items[3].quality).toBe(50);
+      expect(items[4].quality).toBe(50);
+      expect(items[5].quality).toBe(50);
+    });
   })
 
   describe('Sulfuras', () => {
