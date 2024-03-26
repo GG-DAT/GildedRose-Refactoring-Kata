@@ -33,6 +33,8 @@ export class GildedRose {
       this.adjustQuality(item, 1);
     } else if (this.isBackstagePass(item)) {
       this.updateBackstagePassQuality(item);
+    } else if (this.isConjuredItem(item)) {
+      this.adjustQuality(item, -2);
     } else {
       this.adjustQuality(item, -1);
     }
@@ -60,6 +62,8 @@ export class GildedRose {
         item.quality = 0;
       } else if (this.isAgingItem(item)) {
         this.adjustQuality(item, 1);
+      } else if (this.isConjuredItem(item)) {
+        this.adjustQuality(item, -2);
       } else {
         this.adjustQuality(item, -1);
       }
@@ -79,6 +83,10 @@ export class GildedRose {
 
   private isBackstagePass(item: Item) {
     return item.name.startsWith("Backstage passes");
+  }
+
+  private isConjuredItem(item: Item) {
+    return item.name.startsWith("Conjured");
   }
 
   private isLegendaryItem(item: Item) {
