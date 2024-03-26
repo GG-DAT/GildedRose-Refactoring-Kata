@@ -24,13 +24,13 @@ public abstract class AbstractItemHandler {
 
   protected void increaseQuality(final int amount) {
     item.quality = Math.min(item.quality + amount, MAX_QUALITY);
-}
+  }
 
   protected void decreaseQuality(final int amount) {
-  item.quality = Math.max(item.quality - amount, 0);
-}
+    item.quality = Math.max(item.quality - amount, 0);
+  }
 
   protected void decreaseSellIn() {
-  item.sellIn = item.sellIn - 1;
-}
+    item.sellIn = item.sellIn - 1;
+  }
 }

@@ -13,7 +13,8 @@ public class ConjuredItemHandler extends AbstractItemHandler {
     decreaseQuality(getQualityAmount());
     decreaseSellIn();
   }
-  
+
+  @Override
   protected int getQualityAmount() {
     return super.getQualityAmount() * DOUBLE_RATE;
   }

@@ -13,7 +13,7 @@ public class BackstagePassesItemHandler extends AbstractItemHandler {
   }
 
   private void updateQuality() {
-    if(item.sellIn <= SELL_IN_DAYS_REACHED) {
+    if (item.sellIn <= SELL_IN_DAYS_REACHED) {
       item.quality = 0;
     } else {
       increaseQuality(getQualityAmount());
