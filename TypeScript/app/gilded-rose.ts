@@ -11,6 +11,8 @@ export class Item {
 }
 
 export class GildedRose {
+  static readonly MAX_ITEM_QUALITY = 50;
+
   items: Array<Item>;
 
   constructor(items = [] as Array<Item>) {
@@ -28,25 +30,15 @@ export class GildedRose {
 
   private updateItemQuality(item: Item) {
     if (!this.isAgingItem(item) && !this.isBackstagePass(item)) {
-      if (item.quality > 0) {
-        if (!this.isLegendaryItem(item)) {
-          item.quality = item.quality - 1;
-        }
-      }
+      this.adjustQuality(item, -1);
     } else {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-        if (this.isBackstagePass(item)) {
-          if (item.sellIn < 11) {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
-            }
-          }
-          if (item.sellIn < 6) {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
-            }
-          }
+      this.adjustQuality(item, 1);
+      if (this.isBackstagePass(item)) {
+        if (item.sellIn < 11) {
+          this.adjustQuality(item, 1);
+        }
+        if (item.sellIn < 6) {
+          this.adjustQuality(item, 1);
         }
       }
     }
@@ -62,19 +54,21 @@ export class GildedRose {
     if (item.sellIn < 0) {
       if (!this.isAgingItem(item)) {
         if (!this.isBackstagePass(item)) {
-          if (item.quality > 0) {
-            if (!this.isLegendaryItem(item)) {
-              item.quality = item.quality - 1;
-            }
-          }
+          this.adjustQuality(item, -1);
         } else {
-          item.quality = item.quality - item.quality;
+          item.quality = 0;
         }
       } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1;
-        }
+        this.adjustQuality(item, 1);
       }
+    }
+  }
+
+  private adjustQuality(item: Item, amount: number) {
+    if (!this.isLegendaryItem(item)) {
+
+      item.quality = Math.min(item.quality + amount, GildedRose.MAX_ITEM_QUALITY);
+      item.quality = Math.max(item.quality, 0);
     }
   }
 
