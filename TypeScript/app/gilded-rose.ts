@@ -16,6 +16,10 @@ export class GildedRose {
   private readonly SULFURAS = 'Sulfuras, Hand of Ragnaros';
   private readonly MAX_QUALITY = 50;
 
+  //backstage passes
+  private readonly CLOSE_TO_CONCERT_IN_DAYS = 10;
+  private readonly LAST_MINUTE_CONCERT_IN_DAYS = 5
+
   private items: Array<Item>;
 
   constructor(items = [] as Array<Item>) {
@@ -32,24 +36,18 @@ export class GildedRose {
           this.increaseQuality(item, 1);
         }
       } else {
-        if (item.quality > 0) {
-          item.quality = item.quality - 1
-        }
+        this.decreaseQuality(item, 1);
       }
-      item.sellIn = item.sellIn - 1;
+      item.sellIn--;
       if (item.sellIn < 0) {
         if (item.name != this.AGED_BRIE) {
           if (item.name != this.BACKSTAGE_PASS) {
-            if (item.quality > 0) {
-              item.quality = item.quality - 1
-            }
+            this.decreaseQuality(item, 1);
           } else {
             item.quality = item.quality - item.quality
           }
         } else {
-          if (item.quality < this.MAX_QUALITY) {
-            item.quality = item.quality + 1
-          }
+          this.increaseQuality(item, 1);
         }
       }
     });
@@ -58,9 +56,9 @@ export class GildedRose {
   }
 
   private increaseQualityBackstage(backstageItem: Item) {
-    if (backstageItem.sellIn < 6) {
+    if (backstageItem.sellIn <= this.LAST_MINUTE_CONCERT_IN_DAYS) {
       this.increaseQuality(backstageItem, 3);
-    } else if (backstageItem.sellIn < 11) {
+    } else if (backstageItem.sellIn <= this.CLOSE_TO_CONCERT_IN_DAYS) {
       this.increaseQuality(backstageItem, 2);
     } else {
       this.increaseQuality(backstageItem, 1);
@@ -70,5 +68,10 @@ export class GildedRose {
   private increaseQuality(item: Item, value: number) {
     item.quality += value;
     item.quality = Math.min(item.quality, this.MAX_QUALITY);
+  }
+
+  private decreaseQuality(item: Item, value: number) {
+    item.quality -= value;
+    item.quality = Math.max(item.quality, 0);
   }
 }
