@@ -45,15 +45,22 @@ describe('Gilded Rose', () => {
 
   describe('Aged Brie', () => {
     it('Should increase item quality on updateQuality', () => {
-      const gildedRose = new GildedRose([new Item('Aged Brie', 5, 49)]);
+      const gildedRose = new GildedRose([new Item('Aged Brie', 5, 25)]);
       const items = gildedRose.updateQuality();
-      expect(items[0].quality).toBe(50);
+      expect(items[0].quality).toBe(26);
     });
 
     it('Should increase item quality for Aged Brie, but not above 50', () => {
       const gildedRose = new GildedRose([new Item('Aged Brie', 5, 50)]);
       const items = gildedRose.updateQuality();
       expect(items[0].quality).toBe(50);
+    });
+
+    it('should increases in quality twice as fast when sellIn date passed', () => {
+      const gildedRose = new GildedRose([new Item('Aged Brie', 0, 25), new Item('Aged Brie', -25, 49)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(27);
+      expect(items[1].quality).toBe(50);
     });
 
   })
