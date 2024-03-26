@@ -29,18 +29,22 @@ export class GildedRose {
   }
 
   private updateItemQuality(item: Item) {
-    if (!this.isAgingItem(item) && !this.isBackstagePass(item)) {
+    if (this.isAgingItem(item)) {
+      this.adjustQuality(item, 1);
+    } else if (this.isBackstagePass(item)) {
+      this.updateBackstagePassQuality(item);
+    } else {
       this.adjustQuality(item, -1);
+    }
+  }
+
+  private updateBackstagePassQuality(item: Item) {
+    if (item.sellIn < 6) {
+      this.adjustQuality(item, 3);
+    } else if (item.sellIn < 11) {
+      this.adjustQuality(item, 2);
     } else {
       this.adjustQuality(item, 1);
-      if (this.isBackstagePass(item)) {
-        if (item.sellIn < 11) {
-          this.adjustQuality(item, 1);
-        }
-        if (item.sellIn < 6) {
-          this.adjustQuality(item, 1);
-        }
-      }
     }
   }
 
@@ -52,21 +56,18 @@ export class GildedRose {
 
   private checkIfSellInDatePassed(item: Item) {
     if (item.sellIn < 0) {
-      if (!this.isAgingItem(item)) {
-        if (!this.isBackstagePass(item)) {
-          this.adjustQuality(item, -1);
-        } else {
-          item.quality = 0;
-        }
-      } else {
+      if (this.isBackstagePass(item)) {
+        item.quality = 0;
+      } else if (this.isAgingItem(item)) {
         this.adjustQuality(item, 1);
+      } else {
+        this.adjustQuality(item, -1);
       }
     }
   }
 
   private adjustQuality(item: Item, amount: number) {
     if (!this.isLegendaryItem(item)) {
-
       item.quality = Math.min(item.quality + amount, GildedRose.MAX_ITEM_QUALITY);
       item.quality = Math.max(item.quality, 0);
     }
