@@ -131,5 +131,11 @@ describe('Gilded Rose', () => {
     });
   })
 
-
+  describe('Conjured', () => {
+    it('Should decrease in quality twice as fast', () => {
+      const gildedRose = new GildedRose([new Item('Conjured', 5, 25)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(23);
+    });
+  })
 });
