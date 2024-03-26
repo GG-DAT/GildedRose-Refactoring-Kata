@@ -69,6 +69,17 @@ describe('Gilded Rose', () => {
   })
 
   describe('Sulfuras', () => {
+    it('Should not update sellIn', () => {
+      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 25)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].sellIn).toBe(5);
+    });
+
+    it('Should not update quality', () => {
+      const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 25)]);
+      const items = gildedRose.updateQuality();
+      expect(items[0].quality).toBe(25);
+    });
   })
 
 
