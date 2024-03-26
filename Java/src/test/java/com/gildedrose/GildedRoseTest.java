@@ -159,6 +159,18 @@ class GildedRoseTest {
     assertEquals(30, app.items[0].quality);
     assertEquals(-2, app.items[0].sellIn);
   }
+  
+  @Test
+  void agedBrieQualityIncreasesTwiceAsFastAfterSellDatePassedButNotAbove50() {
+      Item[] items = new Item[] { new Item("Aged Brie", -3, 47) };
+      GildedRose app = new GildedRose(items);
+      app.updateQuality();
+      assertEquals(49, app.items[0].quality);
+      assertEquals(-4, app.items[0].sellIn);
+      app.updateQuality();
+      assertEquals(50, app.items[0].quality);
+      assertEquals(-5, app.items[0].sellIn);
+  }
 
   @Test
   void sulfurasNeverSellsOrDecreasesInQuality() {
