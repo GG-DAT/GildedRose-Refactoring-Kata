@@ -29,26 +29,21 @@ export class GildedRose {
   updateQuality() {
     const specialQualityIncreases = [this.AGED_BRIE, this.BACKSTAGE_PASS];
     this.items.filter(item => item.name != this.SULFURAS).forEach(item => {
+      item.sellIn--;
       if (specialQualityIncreases.includes(item.name)) {
-        if (item.name == this.BACKSTAGE_PASS) {
-          this.increaseQualityBackstage(item);
+        if (item.name === this.BACKSTAGE_PASS) {
+          if (item.sellIn < 0) {
+            item.quality = 0;
+          } else {
+            this.increaseQualityBackstage(item);
+          }
+        } else if (item.sellIn < 0) {
+          this.increaseQuality(item, 2);
         } else {
           this.increaseQuality(item, 1);
         }
       } else {
-        this.decreaseQuality(item, 1);
-      }
-      item.sellIn--;
-      if (item.sellIn < 0) {
-        if (item.name != this.AGED_BRIE) {
-          if (item.name != this.BACKSTAGE_PASS) {
-            this.decreaseQuality(item, 1);
-          } else {
-            item.quality = item.quality - item.quality
-          }
-        } else {
-          this.increaseQuality(item, 1);
-        }
+        this.decreaseQuality(item);
       }
     });
 
@@ -70,8 +65,12 @@ export class GildedRose {
     item.quality = Math.min(item.quality, this.MAX_QUALITY);
   }
 
-  private decreaseQuality(item: Item, value: number) {
-    item.quality -= value;
+  private decreaseQuality(item: Item) {
+    if (item.sellIn < 0) {
+      item.quality -= 2;
+    } else {
+      item.quality--;
+    }
     item.quality = Math.max(item.quality, 0);
   }
 }
